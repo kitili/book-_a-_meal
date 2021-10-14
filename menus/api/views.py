@@ -35,7 +35,7 @@ def addMenuItem(request):
         serializer = menusSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
-            menu_item = serializer.save()
+            menu_item = serializer.save(owner=request.user)
             data = menusSerializer(menu_item).data
         else:
             data = serializer.errors
@@ -74,6 +74,7 @@ def getSingleMenuItem(request,pk):
 def updateMenuItem(request,pk):
     try:
         menu = menus.objects.get(id=pk)
+        
     except menus.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -83,7 +84,7 @@ def updateMenuItem(request,pk):
             menu_item = serializer.save()
             return Response(menusSerializer(menu_item).data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)      
      
      
      
