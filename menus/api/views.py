@@ -35,7 +35,7 @@ def addMenuItem(request):
         serializer = menusSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
-            menu_item = serializer.save()
+            menu_item = serializer.save(owner=request.user)
             data = menusSerializer(menu_item).data
         else:
             data = serializer.errors

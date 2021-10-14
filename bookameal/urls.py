@@ -25,6 +25,7 @@ urlpatterns = [
     # Rest framework urls
     path('api/users/', include('users.api.urls')),
     path('api/menus/', include('menus.api.urls')),
+    path('api/orders/', include('orders.api.urls')),
     
     
     
