@@ -83,7 +83,8 @@ def updateMenuItem(request,pk):
             menu_item = serializer.save()
             return Response(menusSerializer(menu_item).data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)       
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)       
      
      
      
