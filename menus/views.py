@@ -6,6 +6,10 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from .models import menus
 from .serializer import menusSerializer
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from users.models import Account
+from users.api.serializers import ProfileSerializer
+from rest_framework.decorators import api_view, permission_classes
  
 class menuslist(APIView):
      
@@ -14,5 +18,15 @@ class menuslist(APIView):
          serializer=menusSerializer(menus1,many=True)
          return Response(serializer .data)
      
-         
-         
+
+@api_view(['POST'])
+def registeradmin(request):
+    if request.method == 'POST':
+        serializer = createSerializers(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            account = serializer.save() 
+            data = ProfileSerializer(account).data
+        else:
+            data = serializer.errors
+        return Response(data=data)

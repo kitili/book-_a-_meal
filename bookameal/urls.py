@@ -24,7 +24,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Rest framework urls
     path('api/users/', include('users.api.urls')),
-    path('menus/', views.menuslist.as_view()),
+    path('api/menus/', include('menus.api.urls')),
+    
+    
+    
+
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
