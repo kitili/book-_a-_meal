@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'menus',
     'users.apps.UsersConfig',
+    'orders.apps.OrdersConfig',
     'corsheaders',
 ]
 
