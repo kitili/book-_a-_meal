@@ -55,7 +55,7 @@ class LoginSerializer(serializers.ModelSerializer):
     tokens = serializers.DictField(tokens)
     class Meta:
         model = Account
-        fields = ['id','email','username','date_joined','user_image','first_name','other_name','tokens', 'password']
+        fields = ['id','email','username','date_joined','user_image','first_name','other_name','tokens', 'password','is_staff']
 
     def validate(self, data):
         email=data['email']
