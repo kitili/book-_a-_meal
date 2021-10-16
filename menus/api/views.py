@@ -52,7 +52,7 @@ def getMenuItems(request):
     if request.method == 'GET':
         serializer = menusSerializer(menus1, many=True)
         data = serializer.data
-        return Response({'status':'success','data':data}, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_200_OK)
     
 
 @api_view(['GET'])
@@ -65,7 +65,7 @@ def getSingleMenuItem(request,pk):
     
     if request.method == 'GET':
         serializer = menusSerializer(menu)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
         
         
         
@@ -82,7 +82,7 @@ def updateMenuItem(request,pk):
         serializer = menusSerializer(menu, data=request.data)
         if serializer.is_valid():
             menu_item = serializer.save()
-            return Response(menusSerializer(menu_item).data)
+            return Response(menusSerializer(menu_item).data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)      
      
@@ -101,4 +101,4 @@ def deleteMenuItem(request,pk):
 		data = {}
 		if operation:
 			data['response'] = 'Menu item has been deleted.'
-		return Response(data=data)
+		return Response(data=data, status=status.HTTP_200_OK)
