@@ -14,7 +14,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from pathlib import Path
-# from decouple import config, Csv
+import django_heroku
+import dj_database_url
+from decouple import config, Csv
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,15 +27,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY =  config('SECRET_KEY')
-SECRET_KEY =  os.environ.get('SECRET_KEY')
+SECRET_KEY =  config('SECRET_KEY')
+# SECRET_KEY =  os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG')
-DEBUG = os.environ.get('DEBUG')
+DEBUG = config('DEBUG')
+# DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 
 # Application definition
 
@@ -47,13 +49,9 @@ INSTALLED_APPS = [
     'cloudinary',
     'rest_framework',
     'menus',
-    
-
-
     'users.apps.UsersConfig',
-
-   
-
+    'orders.apps.OrdersConfig',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -95,6 +93,8 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'users.Account'
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,6 +102,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'bookameal.urls'
@@ -109,7 +111,9 @@ ROOT_URLCONF = 'bookameal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,13 +132,36 @@ WSGI_APPLICATION = 'bookameal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# development
+if config('MODE')=="dev":
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': config('DB_NAME'),
+           'USER': config('DB_USER'),
+           'PASSWORD': config('DB_PASSWORD'),
+           'HOST': config('DB_HOST'),
+           'PORT': '',
+       }
+   }
+# production
+else:
+   DATABASES = {
+       'default': dj_database_url.config(
+           default=config('DATABASE_URL')
+       )
+   }
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -174,15 +201,25 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Email configurations 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
+CORS_ALLOW_ALL_ORIGINS = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
+
 MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

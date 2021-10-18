@@ -1,0 +1,1 @@
+web: gunicorn bookameal.wsgi --log-file -

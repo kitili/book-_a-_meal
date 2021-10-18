@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import uuid
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
@@ -31,19 +32,19 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-    email           = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username        = models.CharField(max_length=30, unique=True)
-    date_joined	    = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    last_login      = models.DateTimeField(verbose_name='last login', auto_now=True) 
-    is_admin        = models.BooleanField(default=False) 
-    is_active       = models.BooleanField(default=True) 
-    is_staff        = models.BooleanField(default=False) 
-    is_superuser    = models.BooleanField(default=False) 
-    user_image      = models.ImageField(blank=True, null=True, upload_to='profiles/', default='profiles/default.jpeg')
-    first_name      = models.CharField(max_length=30,blank=True, null=True)
-    other_name      = models.CharField(max_length=30,blank=True, null=True)
+    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
+    username = models.CharField(max_length=30, unique=True) 
+    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
+    is_admin = models.BooleanField(default=False) 
+    is_active = models.BooleanField(default=True) 
+    is_staff = models.BooleanField(default=False) 
+    is_superuser = models.BooleanField(default=False) 
+    user_image = models.ImageField(blank=True, null=True, upload_to='profiles/', default='profiles/default.jpeg')
+    first_name = models.CharField(max_length=30,blank=True, null=True)
+    other_name = models.CharField(max_length=30,blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -58,3 +59,11 @@ class Account(AbstractBaseUser):
     
     def has_module_perms(self,app_label):
         return True
+
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+
+        return {
+            'refresh':str(refresh),
+            'access': str(refresh.access_token),
+        }
