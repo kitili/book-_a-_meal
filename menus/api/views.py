@@ -15,10 +15,17 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import render
+from menus.models import photos #import photos model
+
 
 from menus.models import menus
 from menus.api.serializers import menusSerializer
 
+def index(request):
+    photo = photos.objects.all()
+    ctx = {'photo':photo}
+    return render(request, 'index.html', ctx)
 
  
 class menuslist(APIView):

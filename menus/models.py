@@ -11,6 +11,7 @@
 from django.db import models
 import uuid
 from users.models import Account
+from cloudinary.models import CloudinaryField
 
 
 class menus(models.Model):
@@ -23,6 +24,14 @@ class menus(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True,
                           primary_key=True, editable=False)
+    
+    
+
+class photos(models.Model):
+    # title field
+    title = models.CharField(max_length=100)
+    #image field
+    image = CloudinaryField('image')
     
     def __str__(self):
         return self.name

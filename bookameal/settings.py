@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from pathlib import Path
 import django_heroku
 import dj_database_url
@@ -43,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'cloudinary',
     'rest_framework',
     'menus',
     'users.apps.UsersConfig',
@@ -178,6 +181,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# adding config
+cloudinary.config( 
+  cloud_name = "YOUR_CLOUD_NAME", 
+  api_key = "YOUR_API_KEY", 
+  api_secret = "YOUR_API_SECRET",
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
