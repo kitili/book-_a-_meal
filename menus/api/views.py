@@ -84,3 +84,26 @@ def deleteMenuItem(request,pk):
 		if operation:
 			data['response'] = 'Menu item has been deleted.'
 		return Response(data=data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def setMenuItem(request,pk):
+    try:
+        selected_menu_item = menus.objects.get(id=pk)
+    except menus.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        try:
+            previous_selection = menus.objects.get(days_selection=True)
+            previous_selection.days_selection = False
+            previous_selection.save()
+
+            selected_menu_item.days_selection = True
+            selected_menu_item.save()
+        except menus.DoesNotExist:
+            selected_menu_item.days_selection = True
+            selected_menu_item.save()
+        
+        serializer = menusSerializer(selected_menu_item)
+        return Response(serializer.data, status=status.HTTP_200_OK)

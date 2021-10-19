@@ -10,6 +10,7 @@ class menus(models.Model):
     price = models.IntegerField(default=0, null=True, blank=True)
     menu_image = models.ImageField(upload_to='images/menus/')
     created = models.DateTimeField(auto_now_add=True)
+    days_selection = models.BooleanField(default=False)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     
     
