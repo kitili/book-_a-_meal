@@ -1,40 +1,15 @@
-# from django.shortcuts import render
-# from django.http import HttpResponse
-# from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework import serializers, status
-from menus.models import menus
-from .serializers import menusSerializer
-# from rest_framework.permissions import IsAuthenticated,IsAdminUser
-# from rest_framework.decorators import permission_classes
-# from users.models import Account
-# from users.api.serializers import ProfileSerializer
+
+from django.shortcuts import render
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
-from django.shortcuts import render
-from menus.models import photos #import photos model
-
 
 from menus.models import menus
 from menus.api.serializers import menusSerializer
-
-def index(request):
-    photo = photos.objects.all()
-    ctx = {'photo':photo}
-    return render(request, 'index.html', ctx)
-
- 
-class menuslist(APIView):
-     
-     def get(self,request):
-         menus1= menus.objects.all ()
-         serializer=menusSerializer(menus1,many=True)
-         return Response(serializer .data)
-     
+   
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def addMenuItem(request):

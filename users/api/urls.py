@@ -15,7 +15,6 @@ urlpatterns = [
     path('profile/<str:pk>/', views.userProfile),
     path('profile/<str:pk>/edit/', views.updateProfile),
 
-
     path('change-password-request/', views.requestPasswordReset, name='change-password-request'),
     path('change-password/<str:uidb64>/<str:token>/', views.resetPassword, name='change-password-reset'),
 ]

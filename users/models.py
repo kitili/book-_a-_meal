@@ -42,7 +42,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True) 
     is_staff = models.BooleanField(default=False) 
     is_superuser = models.BooleanField(default=False) 
-    user_image = models.ImageField(blank=True, null=True, upload_to='profiles/', default='profiles/default.jpeg')
+    user_image = models.ImageField(blank=True, null=True, upload_to='images/profiles/', default='images/profiles/user-default_eulult')
     first_name = models.CharField(max_length=30,blank=True, null=True)
     other_name = models.CharField(max_length=30,blank=True, null=True)
 
