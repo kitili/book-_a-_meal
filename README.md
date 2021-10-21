@@ -56,7 +56,7 @@ As a user of the application you will be able to:
 ## Support and Contact Details:
 
 {For enquiries feel free to contact us : 
-email - Contact us at mourinekitilimourine@gmail.com or patrick.kimanthi@student.moringaschool.com
+email - Contact us at mourinekitilimourine@gmail.com or kimanthip@gmail.com
 or Tel:+2457 12544598 or +254 723768573}
 
 
